@@ -43,6 +43,7 @@ Model Context Protocol (MCP) is a standardized way for AI applications to intera
 MCP servers are configured in your VS Code `settings.json` file.
 
 Open settings.json:
+
 - Press `Ctrl+Shift+P` (Cmd+Shift+P on Mac)
 - Type "Preferences: Open User Settings (JSON)"
 - Press Enter
@@ -89,7 +90,7 @@ Add to `settings.json`:
 
 #### Get GitHub Token
 
-1. Go to https://github.com/settings/tokens
+1. Go to <https://github.com/settings/tokens>
 2. Click "Generate new token (classic)"
 3. Select scopes:
    - `repo` (full control of private repositories)
@@ -99,11 +100,13 @@ Add to `settings.json`:
 5. Set environment variable:
 
 **Windows (PowerShell)**:
+
 ```powershell
 [System.Environment]::SetEnvironmentVariable('GITHUB_TOKEN', 'your-token-here', 'User')
 ```
 
 **macOS/Linux**:
+
 ```bash
 echo 'export GITHUB_TOKEN="your-token-here"' >> ~/.zshrc
 # or ~/.bashrc depending on your shell
@@ -130,16 +133,18 @@ In your workspace `.vscode/settings.json`:
 
 That's it! Copilot can now search the web when you use the `#websearch` keyword.
 
-### 3. Playwright MCP (Official Microsoft)
+### 3. Playwright MCP (Community - ExecuteAutomation)
 
 **What it does**: Browser automation for E2E testing.
 
 **Why you need it**: Testing guardrails require E2E tests.
 
+**Note**: As of October 2025, the official `@microsoft/playwright-mcp` package does not exist. We use the community-maintained `@executeautomation/playwright-mcp-server` instead.
+
 #### Installation
 
 ```bash
-npm install -g @microsoft/playwright-mcp
+npm install -g @executeautomation/playwright-mcp-server
 ```
 
 #### Configuration
@@ -153,7 +158,7 @@ Add to `settings.json`:
       "command": "npx",
       "args": [
         "-y",
-        "@microsoft/playwright-mcp"
+        "@executeautomation/playwright-mcp-server"
       ]
     }
   }
@@ -190,17 +195,17 @@ Add to `settings.json`:
 }
 ```
 
-### 5. Microsoft Learn MCP
+### 5. Microsoft Learn MCP (Remote HTTP Server)
 
 **What it does**: Access to Microsoft documentation (Azure, .NET, VS Code API).
 
 **Why you need it**: If working with Microsoft technologies.
 
+**Note**: Microsoft Learn MCP Server is a remote HTTP-based server, not an npm package. It uses the `mcp-remote` package to connect.
+
 #### Installation
 
-```bash
-npm install -g @microsoftdocs/mcp
-```
+No installation required! Uses the remote endpoint at `https://learn.microsoft.com/api/mcp`
 
 #### Configuration
 
@@ -209,11 +214,12 @@ Add to `settings.json`:
 ```json
 {
   "github.copilot.chat.mcp.servers": {
-    "microsoft-docs": {
+    "mslearn": {
       "command": "npx",
       "args": [
         "-y",
-        "@microsoftdocs/mcp"
+        "mcp-remote",
+        "https://learn.microsoft.com/api/mcp"
       ]
     }
   }
@@ -222,7 +228,7 @@ Add to `settings.json`:
 
 ## Complete Configuration Example
 
-Here's a complete `settings.json` with all essential servers:
+Here's a complete `settings.json` with all essential servers (verified October 2025):
 
 ```json
 {
@@ -238,15 +244,19 @@ Here's a complete `settings.json` with all essential servers:
     },
     "playwright": {
       "command": "npx",
-      "args": ["-y", "@microsoft/playwright-mcp"]
+      "args": ["-y", "@executeautomation/playwright-mcp-server"]
     },
     "context7": {
       "command": "npx",
       "args": ["-y", "@upstash/context7-mcp"]
     },
-    "microsoft-docs": {
+    "mslearn": {
       "command": "npx",
-      "args": ["-y", "@microsoftdocs/mcp"]
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://learn.microsoft.com/api/mcp"
+      ]
     }
   }
 }
@@ -259,27 +269,35 @@ Here's a complete `settings.json` with all essential servers:
 1. **Open GitHub Copilot Chat** (Ctrl+Alt+I or Cmd+Alt+I)
 
 2. **Test Web Search**:
+
    ```
    @workspace #websearch React Server Components best practices October 2025
    ```
+
    You should see search results.
 
 3. **Test GitHub MCP**:
+
    ```
    @workspace List my repositories
    ```
+
    You should see your GitHub repos.
 
 4. **Test Context7**:
+
    ```
    @workspace Get documentation for React useEffect
    ```
+
    You should get official React docs.
 
 5. **Test Playwright**:
+
    ```
    @workspace Navigate to https://example.com and take a screenshot
    ```
+
    You should get a browser screenshot.
 
 ### Check MCP Server Status
@@ -297,12 +315,14 @@ Here's a complete `settings.json` with all essential servers:
 **Solutions**:
 
 1. **Check Node.js version**:
+
    ```bash
    node --version
    # Should be v18 or higher
    ```
 
 2. **Reinstall server**:
+
    ```bash
    npm uninstall -g @modelcontextprotocol/server-github
    npm install -g @modelcontextprotocol/server-github
@@ -320,6 +340,7 @@ Here's a complete `settings.json` with all essential servers:
 **Solutions**:
 
 1. **Verify token is set**:
+
    ```bash
    # Windows PowerShell
    $env:GITHUB_TOKEN
@@ -339,6 +360,7 @@ Here's a complete `settings.json` with all essential servers:
 **Solutions**:
 
 1. **Fix npm permissions**:
+
    ```bash
    # macOS/Linux
    sudo chown -R $USER /usr/local/lib/node_modules
@@ -403,6 +425,7 @@ Enable verbose MCP logging:
 ```
 
 View logs:
+
 1. Help > Toggle Developer Tools
 2. Console tab
 3. Filter by "mcp"
@@ -412,12 +435,14 @@ View logs:
 ### ⚠️ Token Security
 
 **DO**:
+
 - ✅ Use environment variables for tokens
 - ✅ Use GitHub fine-grained tokens with minimal scopes
 - ✅ Rotate tokens regularly
 - ✅ Never commit tokens to git
 
 **DON'T**:
+
 - ❌ Hardcode tokens in settings.json
 - ❌ Share tokens
 - ❌ Use tokens with excessive permissions
@@ -426,11 +451,13 @@ View logs:
 ### MCP Server Permissions
 
 Only enable MCP servers you actually need. Each server has access to:
+
 - Your codebase
 - Your chat history with Copilot
 - Any APIs it connects to
 
 Review server source code before using:
+
 ```bash
 # Check what a server does
 npm view @modelcontextprotocol/server-github repository
@@ -455,7 +482,7 @@ npm view @modelcontextprotocol/server-github repository
 
 ### Community Servers
 
-Find more at: https://code.visualstudio.com/mcp
+Find more at: <https://code.visualstudio.com/mcp>
 
 ## Usage in Copilot Chat
 
@@ -502,7 +529,7 @@ For GitHub Copilot Business/Enterprise:
 3. Configure "MCP servers in Copilot" policy
 4. Approve specific MCP servers for your organization
 
-See: https://docs.github.com/copilot/managing-copilot/managing-policies-for-copilot-in-your-organization
+See: <https://docs.github.com/copilot/managing-copilot/managing-policies-for-copilot-in-your-organization>
 
 ### Approved Server List
 

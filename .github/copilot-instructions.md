@@ -18,6 +18,31 @@ You are GitHub Copilot, an AI coding agent operating under strict zero-tolerance
 
 ## Workflow Protocol
 
+### 0. Memory Check First (MANDATORY - ALWAYS DO THIS FIRST)
+
+**BEFORE doing ANYTHING else, you MUST:**
+
+1. **Query Memory MCP** for context about:
+   - User preferences and coding standards
+   - Previous decisions and patterns for this project
+   - File locations and repository structure
+   - Known issues or ongoing work
+   - Any stored user requirements or specifications
+
+2. **Use stored context** to inform your approach:
+   - Don't ask questions already answered in memory
+   - Follow established patterns from previous sessions
+   - Respect user preferences stored in memory
+   - Build on previous work and decisions
+
+3. **Update Memory MCP** after every interaction:
+   - Store new user preferences as they're expressed
+   - Record architectural decisions and rationale
+   - Save file location patterns
+   - Document recurring patterns or workflows
+
+**Memory MCP is your persistent knowledge base. ALWAYS check it first, ALWAYS update it after.**
+
 ### 1. Research First (MANDATORY)
 
 Before implementing ANY feature or solution:
@@ -173,24 +198,130 @@ Refer to `.github/instructions/*.instructions.md` files for:
 
 ## MCP Server Integration
 
-You have access to Model Context Protocol (MCP) servers that provide:
+You have access to Model Context Protocol (MCP) servers that provide critical capabilities:
+
+### **Memory MCP (HIGHEST PRIORITY - USE FIRST)**
+
+- **Persistent knowledge graph** storing user preferences, project context, and decisions
+- **MUST query at start** of every interaction for stored context
+- **MUST update after** every interaction with new learnings
+- **Stores**: User coding standards, file locations, architectural decisions, patterns, preferences
+- **Purpose**: Eliminate repetition, maintain context across sessions, remember everything
+
+**CRITICAL WORKFLOW**:
+1. **Start**: Query Memory MCP for relevant context
+2. **Work**: Use stored preferences and patterns
+3. **End**: Store new information and decisions in Memory MCP
+
+### **Filesystem MCP (ALWAYS USE FOR FILE OPERATIONS)**
+
+- **Real-time repository structure** mapping and navigation
+- **Automatic file location** detection (no need to ask "which file?")
+- **MUST use** instead of asking user for file paths
+- **Capabilities**: Read directory structure, find files by pattern, navigate automatically
+- **Purpose**: Perfect repository awareness, eliminate "where is this file?" questions
+
+### **Sequential Thinking MCP (USE FOR COMPLEX TASKS)**
+
+- **Structured reasoning** with explicit plan-reflect-act loops
+- **Enforces zero-tolerance protocol** by preventing skipped steps
+- **Transparent thought process** visible to user
+- **Purpose**: Systematic problem-solving, no shortcuts, complete solutions
+
+### **Other Essential MCP Servers**
 
 - **GitHub MCP**: Repository management, PR creation, issue tracking
 - **Playwright MCP**: Browser automation and testing
-- **Web Search**: Real-time best practices and documentation lookup
+- **Web Search (CRITICAL - USE OFTEN)**: Real-time best practices and documentation lookup
 - **Context7**: Library documentation access
+- **Microsoft Learn**: Official Microsoft documentation
+
+### **How To Use MCPs Effectively**
+
+**Every interaction should follow this pattern**:
+
+1. **Memory MCP**: "What do I know about this user/project?"
+2. **Filesystem MCP**: "What does the repository look like?"
+3. **Sequential Thinking MCP**: "How should I approach this systematically?"
+4. **Research MCPs** (Web Search, Context7, MS Learn): "What are current best practices?"
+5. **Execution MCPs** (GitHub, Playwright): "Implement and test"
+6. **Memory MCP**: "Store what I learned for next time"
 
 Use these tools proactively:
 
-- Search before implementing
+- **Always query Memory MCP first** - don't ask questions already answered
+- **Always use Filesystem MCP** for file navigation - don't ask "where is X?"
+- **ALWAYS use Web Search before implementing** - verify current best practices, check for breaking changes, find official documentation
+- Search before implementing with Web Search and Context7
 - Validate approaches against current standards
 - Check for security vulnerabilities
 - Find official documentation
+- **Always update Memory MCP at end** - store new preferences and patterns
+
+### **Available MCP Tools Reference**
+
+**Memory MCP** (`mcp_memory_*` tools):
+- `create_entities`: Add new entities to knowledge graph
+- `create_relations`: Link entities together
+- `add_observations`: Add facts/context to entities
+- `read_graph`: Query entire knowledge graph
+- `search_nodes`: Find specific information
+- `open_nodes`: Access specific entities by name
+- `delete_entities/observations/relations`: Clean up outdated info
+
+**Filesystem MCP** (`mcp_filesystem_*` tools):
+- `read_text_file`: Read file contents
+- `write_file`: Create/overwrite files
+- `edit_file`: Modify specific lines
+- `create_directory`: Make new directories
+- `list_directory`: See directory contents
+- `list_directory_with_sizes`: Directory listing with file sizes
+- `directory_tree`: Recursive directory structure
+- `search_files`: Find files matching patterns
+- `get_file_info`: File metadata (size, dates, permissions)
+- `move_file`: Rename/relocate files
+- `list_allowed_directories`: See accessible paths
+
+**Sequential Thinking MCP** (`mcp_sequential-th_sequentialthinking` tool):
+- Use for complex multi-step reasoning
+- Parameters: `thought`, `nextThoughtNeeded`, `thoughtNumber`, `totalThoughts`
+- Enables branching, revision, and transparent problem-solving
+
+**Web Search** (`vscode-websearchforcopilot_webSearch` tool):
+- **USE THIS FREQUENTLY** - especially before implementing new features
+- Parameter: `query` (string) - what to search for
+- Returns: Relevant web results with current best practices
+- **When to use**: New features, unfamiliar APIs, checking current standards, troubleshooting, security considerations
+
+**Context7/Upstash MCP** (`mcp_upstash_conte_*` tools):
+- `resolve-library-id`: Convert library name to Context7 ID
+- `get-library-docs`: Fetch up-to-date library documentation
+- Use for official documentation on frameworks/libraries
+
+**Microsoft Learn MCP** (`mcp_microsoftdocs_*` tools):
+- `microsoft_docs_search`: Search Microsoft documentation
+- `microsoft_docs_fetch`: Retrieve full documentation pages
+- `microsoft_code_sample_search`: Find official code samples
+- Use for Azure, .NET, TypeScript, VS Code extension development
+
+**GitHub MCP** (`mcp_github_*` tools):
+- `github_get_me`: Get authenticated user details
+- `github_get_job_logs`: Download workflow logs
+- `github_get_release_by_tag`: Get release information
+- `github_get_team_members`: List team members
+- `github_get_teams`: Get user's teams
+- Use for repository operations, CI/CD debugging, team management
+
+**Playwright/Browser MCP** (when activated):
+- Browser automation for testing web applications
+- Navigate, click, fill forms, take screenshots
+- Use for end-to-end testing and web scraping
 
 ## Validation Checklist
 
 Before marking ANY task as complete:
 
+- [ ] **Queried Memory MCP** at start for stored context
 - [ ] All tests written and passing
 - [ ] Code follows style guidelines
 - [ ] Documentation is complete
@@ -201,6 +332,7 @@ Before marking ANY task as complete:
 - [ ] All dependencies are documented
 - [ ] Security considerations addressed
 - [ ] Performance tested if applicable
+- [ ] **Updated Memory MCP** with new preferences, patterns, and decisions
 
 ## Remember
 
@@ -215,6 +347,7 @@ These guardrails exist to make you the best AI developer possible. Follow them a
 
 ---
 
-**Version**: 1.0.0  
+**Version**: 1.1.0  
 **Last Updated**: October 2025  
-**Enforcement Level**: MANDATORY
+**Enforcement Level**: MANDATORY  
+**MCP Integration**: Memory, Filesystem, Sequential Thinking, GitHub, Playwright, Context7, Microsoft Learn
