@@ -317,12 +317,53 @@ Use these tools proactively:
 - Navigate, click, fill forms, take screenshots
 - Use for end-to-end testing and web scraping
 
+**Key Playwright MCP Tools** (`mcp_playwright_playwright_*`):
+- `navigate`: Navigate to a URL (params: url, browserType, headless, width, height, timeout)
+- `click`: Click an element on the page (params: selector)
+- `fill`: Fill out an input field (params: selector, value)
+- `screenshot`: Take a screenshot of the current page or specific element (params: name, selector, fullPage, savePng, width, height)
+- `get_visible_html`: Get the HTML content of the current page (params: selector, removeScripts, cleanHtml, maxLength)
+- `get_visible_text`: Get the visible text content of the current page
+- `console_logs`: Retrieve console logs from the browser with filtering options (params: type, search, limit, clear)
+- `expect_response`: Wait for a HTTP response (params: id, url)
+- `assert_response`: Validate a previously initiated HTTP response (params: id, value)
+- `go_back`: Navigate back in browser history
+- `go_forward`: Navigate forward in browser history
+- `click_and_switch_tab`: Click a link and switch to the newly opened tab (params: selector)
+- `drag`: Drag an element to a target location (params: sourceSelector, targetSelector)
+- `hover`: Hover an element on the page (params: selector)
+- `press_key`: Press a keyboard key (params: key, selector)
+- `select`: Select an element with Select tag (params: selector, value)
+- `upload_file`: Upload a file to an input[type='file'] element (params: selector, filePath)
+- `iframe_click`: Click an element in an iframe (params: iframeSelector, selector)
+- `iframe_fill`: Fill an element in an iframe (params: iframeSelector, selector, value)
+- `get`: Perform an HTTP GET request (params: url)
+- `post`: Perform an HTTP POST request (params: url, value, headers, token)
+- `put`: Perform an HTTP PUT request (params: url, value)
+- `patch`: Perform an HTTP PATCH request (params: url, value)
+- `delete`: Perform an HTTP DELETE request (params: url)
+- `close`: Close the browser and release all resources
+- `save_as_pdf`: Save the current page as a PDF file (params: outputPath, filename, format, printBackground)
+- `custom_user_agent`: Set a custom User Agent for the browser (params: userAgent)
+- `evaluate`: Execute JavaScript in the browser console (params: script)
+
+**Playwright Code Generation Tools** (when activated):
+- `mcp_playwright_start_codegen_session`: Start recording user actions to generate test code
+- `mcp_playwright_end_codegen_session`: Finalize session and generate test file
+- `mcp_playwright_clear_codegen_session`: Clear recorded actions without generating test
+- `mcp_playwright_get_codegen_session`: Get information about current session
+
 ## Validation Checklist
 
 Before marking ANY task as complete:
 
 - [ ] **Queried Memory MCP** at start for stored context
 - [ ] All tests written and passing
+- [ ] **Playwright E2E tests written for ALL frontend/backend changes**
+- [ ] **All services verified as running (health checks before E2E tests)**
+- [ ] **Complete user workflows tested with Playwright MCP**
+- [ ] **Screenshots captured for visual verification**
+- [ ] **Console logs checked for errors**
 - [ ] Code follows style guidelines
 - [ ] Documentation is complete
 - [ ] No hardcoded values or secrets

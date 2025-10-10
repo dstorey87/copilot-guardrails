@@ -8,6 +8,33 @@
 
 If you write it, you test it. If it's not tested, it's not done.
 
+### Playwright E2E Testing (MANDATORY)
+
+**FOR ALL FRONTEND AND BACKEND CHANGES:**
+
+1. **EVERY feature addition requires Playwright E2E tests** - No exceptions
+2. **Services must be verified as running** before tests execute
+3. **ALL functionality must be tested** - Partial testing = incomplete work
+4. **Nothing is considered tested without Playwright E2E coverage**
+
+**Use Playwright MCP Tools:**
+- `mcp_playwright_playwright_navigate` - Navigate to URLs
+- `mcp_playwright_playwright_click` - Click elements
+- `mcp_playwright_playwright_fill` - Fill form fields
+- `mcp_playwright_playwright_screenshot` - Capture test evidence
+- `mcp_playwright_playwright_get_visible_text` - Verify content
+- `mcp_playwright_playwright_console_logs` - Check for errors
+- `mcp_playwright_start_codegen_session` - Generate test code
+- `mcp_playwright_end_codegen_session` - Save generated tests
+
+**Before ANY frontend/backend code is considered complete:**
+- [ ] Playwright E2E tests written for ALL new functionality
+- [ ] All services verified as running (health checks)
+- [ ] Complete user workflows tested end-to-end
+- [ ] Screenshots captured for visual verification
+- [ ] Console logs checked for errors
+- [ ] Tests pass in headless and headed modes
+
 ## Test Coverage Requirements
 
 ### Minimum Coverage Levels
@@ -150,12 +177,58 @@ describe('UserService Integration', () => {
 });
 ```
 
-### 3. End-to-End Tests
+### 3. End-to-End Tests (MANDATORY WITH PLAYWRIGHT MCP)
 
-**Purpose**: Test complete user workflows
+**Purpose**: Test complete user workflows using Playwright MCP
+
+**CRITICAL**: Use Playwright MCP tools for ALL E2E testing. Traditional Playwright test files are supplementary.
 
 ```typescript
-// Example: Playwright
+// Example: Using Playwright MCP Tools
+// Step 1: Navigate to application
+await mcp_playwright_playwright_navigate({
+  url: 'http://localhost:3000/products/123',
+  browserType: 'chromium',
+  headless: false
+});
+
+// Step 2: Verify service is running
+const pageText = await mcp_playwright_playwright_get_visible_text();
+if (pageText.includes('Error') || pageText.includes('Cannot connect')) {
+  throw new Error('Service is not running - tests cannot proceed');
+}
+
+// Step 3: Test user workflow
+await mcp_playwright_playwright_click({ selector: 'button:text("Add to Cart")' });
+await mcp_playwright_playwright_screenshot({ name: 'cart-added', savePng: true });
+
+await mcp_playwright_playwright_click({ selector: 'a:text("Checkout")' });
+await mcp_playwright_playwright_fill({ selector: '#name', value: 'John Doe' });
+await mcp_playwright_playwright_fill({ selector: '#address', value: '123 Main St' });
+
+await mcp_playwright_playwright_screenshot({ name: 'checkout-form', savePng: true });
+await mcp_playwright_playwright_click({ selector: 'button:text("Place Order")' });
+
+// Step 4: Verify results
+const confirmationText = await mcp_playwright_playwright_get_visible_text();
+if (!confirmationText.includes('Order confirmed')) {
+  throw new Error('Order confirmation not displayed');
+}
+
+// Step 5: Check for console errors
+const logs = await mcp_playwright_playwright_console_logs({ type: 'error' });
+if (logs.length > 0) {
+  throw new Error(`Console errors detected: ${logs}`);
+}
+
+await mcp_playwright_playwright_screenshot({ name: 'order-complete', savePng: true });
+await mcp_playwright_playwright_close();
+```
+
+**Traditional Playwright Test (Supplementary)**:
+
+```typescript
+// Example: Playwright Test Framework (use alongside MCP)
 import { test, expect } from '@playwright/test';
 
 test('user can complete purchase', async ({ page }) => {
@@ -585,6 +658,11 @@ Before marking code as complete:
 - [ ] Edge cases are tested
 - [ ] Error cases are tested
 - [ ] Integration points are tested
+- [ ] **Playwright MCP E2E tests written for ALL new features**
+- [ ] **All services verified as running before E2E tests**
+- [ ] **Complete user workflows tested with Playwright MCP**
+- [ ] **Screenshots captured at key steps for verification**
+- [ ] **Console logs checked for errors**
 - [ ] E2E tests cover user workflows
 - [ ] All tests pass locally
 - [ ] All tests pass in CI
