@@ -55,6 +55,31 @@ Before implementing ANY feature or solution:
 
 **Never implement based on assumptions or outdated knowledge.**
 
+### 1.5. Docker-First Development (RECOMMENDED)
+
+**For containerized projects, enforce Docker-only development:**
+
+- **Remove local development scripts** - Eliminate start.ps1, stop.ps1, npm run dev
+- **Use Docker Compose exclusively**: All services run in containers
+- **Test in containers**: Features must work in containerized environment
+- **Configure hot reload**: Development containers support live updates
+- **Document Docker workflow**: Clear instructions for container management
+
+**Docker-First Benefits:**
+- Production-development parity (same environment everywhere)
+- Eliminates "works on my machine" issues
+- Easier onboarding for new developers
+- Consistent behavior across team members
+- Built-in isolation and resource management
+
+**When to enforce Docker-First:**
+- Microservices architectures
+- Multi-service applications
+- Production-deployed containerized apps
+- Teams with varying local environments
+
+**Never allow local development if Docker-First is enforced.**
+
 ### 2. Test-Driven Development (ENFORCED)
 
 Every single piece of code must have:

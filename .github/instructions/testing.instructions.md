@@ -8,6 +8,45 @@
 
 If you write it, you test it. If it's not tested, it's not done.
 
+### Docker-First Testing (For Containerized Projects)
+
+**When project uses Docker-First development approach:**
+
+1. **Container Testing Requirements**:
+   - All tests must run inside containers
+   - Use `docker-compose exec service npm test` pattern
+   - Verify health checks pass before running tests
+   - Test features survive container rebuild
+   - Verify hot reload works in development containers
+
+2. **Development Testing Workflow**:
+   ```powershell
+   # Start services
+   docker-compose -f docker-compose.dev.yml up -d
+   
+   # Wait for healthy status
+   docker-compose ps
+   
+   # Run tests in container
+   docker-compose exec frontend npm run test:e2e
+   
+   # Check logs
+   docker-compose logs -f
+   
+   # Stop services
+   docker-compose down
+   ```
+
+3. **Container-Specific Tests**:
+   - Health endpoint responses (`/health`)
+   - Container networking between services
+   - Environment variable injection from `.env`
+   - Volume mount persistence
+   - Hot reload functionality (dev mode)
+   - Multi-stage build correctness
+
+**Local testing outside containers is NOT allowed for Docker-First projects.**
+
 ### Playwright E2E Testing (MANDATORY)
 
 **FOR ALL FRONTEND AND BACKEND CHANGES:**
