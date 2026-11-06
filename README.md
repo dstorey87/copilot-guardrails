@@ -90,6 +90,56 @@ git init
 
 ## What's Included
 
+### Java and SQL Repository Instructions Skill
+
+The repository-local [`agents-md` skill](.github/skills/agents-md/SKILL.md)
+creates or safely updates a target repository's root `AGENTS.md` and
+`GUARDRAILS.md`. `AGENTS.md` provides repository context and explicitly directs
+agents to the detailed standards in `GUARDRAILS.md`; the latter is not assumed
+to be automatically discovered.
+
+Ask Copilot, for example:
+
+```text
+Use the agents-md skill to create or update AGENTS.md and GUARDRAILS.md
+for this repository. Determine Java and SQL applicability from README.md
+and source files, and preserve existing instructions.
+```
+
+Use a Copilot surface supporting repository skills. To reuse it elsewhere, copy
+the **entire** `.github/skills/agents-md` folder, including `references` and
+`templates`, into the target repository's `.github/skills` directory. This is a
+repository skill, not a personal installation, and it has no runtime dependencies.
+See [GitHub's skill documentation](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-skills)
+for supported locations.
+
+The skill corroborates README descriptions with Java source, build descriptors,
+SQL/PLSQL scripts and packages, migrations, and embedded queries. It distinguishes
+native SQL from JPQL/HQL and ORM-only database access. It explicitly records when
+no SQL is found, or when inspection is incomplete; absence of `.sql` files alone
+does not establish absence of SQL. Database-access controls still receive review
+when ORM is used without handwritten SQL.
+
+The canonical [`developers-checklist.md`](developers-checklist.md) contains the
+owner-supplied excerpt of USPS Java sections **8.1-8.15** and SQL sections
+**9.1-9.3**, attributed to the
+[Coding Secure Software Standards Procedure](https://blue.usps.gov/corptreasury/_pdf/paytech/coding-secure-software-standards-procedure.pdf).
+It is not the full procedure or independently authenticated against the intranet
+PDF. Keep it synchronized with the skill's bundled standards mapping.
+
+Legacy Java guidance, invalid source examples, framework conflicts, and approved
+exceptions are recorded separately rather than silently rewriting policy.
+Parameter binding complements SQL controls but does not waive the compiled-
+procedure requirement. Existing instructions and exception evidence are preserved
+through managed sections; conflicting instructions require a decision.
+
+The skill generates documentation only: it does not refactor application code,
+execute database operations, modify sample repositories, or certify compliance.
+There is no executable test runner for this documentation-only skill. Review
+policy coverage, evidence, relative links, preserved content, and stable reruns
+using the acceptance criteria in its
+[workflow](.github/skills/agents-md/references/workflow.md).
+
 ### Core Instruction Files
 
 #### `.github/copilot-instructions.md`
